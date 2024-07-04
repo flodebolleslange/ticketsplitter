@@ -1,0 +1,261 @@
+# groups
+
+def create_group_member_table(file):
+
+    """1 argument: file name
+    creates a database for group_members in the selected file"""
+
+    conn = create_connection(file)
+
+    sql_create_group_members_table = """ CREATE TABLE IF NOT EXISTS group_members (
+                                    refresh text,
+                                    record_type text,
+                                    group_UIC text,
+                                    end_date text,
+                                    member_UIC text,
+                                    member_CRS text
+                                        ); """
+
+    table = create_table(conn, sql_create_group_members_table)
+    return table
+
+def create_group_member(conn, group_member):
+    
+    """arguments: database connection, dismantled group_member
+    creates a row in the group_member database from a dismantled group_member"""
+
+    sql = '''INSERT OR REPLACE INTO group_members(refresh,
+                                                record_type,
+                                                group_UIC,
+                                                end_date,
+                                                member_UIC,
+                                                member_CRS)
+                                VALUES(?,?,?,?,?,?);'''
+
+    cursor1 = conn.cursor()
+    cursor1.executemany(sql, group_member)
+    conn.commit()
+    return cursor1.lastrowid
+
+# clusters
+
+def create_cluster_table(file):
+
+    """1 argument: file name
+    creates a database for clusters in the selected file"""
+
+    conn = create_connection(file)
+
+    sql_create_clusters_table = """ CREATE TABLE IF NOT EXISTS clusters (
+                                    refresh text,
+                                    cluster_NLC text,
+                                    member_NLC text,
+                                    end_date text,
+                                    start_date text
+                                        ); """
+
+    table = create_table(conn, sql_create_clusters_table)
+    return table
+
+def create_cluster(conn, cluster):
+    
+    """arguments: database connection, dismantled cluster
+    creates a row in the cluster database from a dismantled cluster"""
+
+    sql = '''INSERT OR REPLACE INTO clusters(refresh,
+                                            cluster_NLC,
+                                            member_NLC,
+                                            end_date,
+                                            start_date)
+                                VALUES(?,?,?,?,?);'''
+
+    cursor1 = conn.cursor()
+    cursor1.executemany(sql, cluster)
+    conn.commit()
+    return cursor1.lastrowid
+
+# stations
+
+def create_station_table(file):
+
+    """1 argument: file name
+    creates a database for stations in the selected file"""
+
+    conn = create_connection(file)
+
+    sql_create_stations_table = """ CREATE TABLE IF NOT EXISTS stations (
+                                    refresh text,
+                                    record_type text,
+                                    UIC_code text PRIMARY KEY,
+                                    end_date text,
+                                    start_date text,
+                                    quote_date text,
+                                    admin_area text,
+                                    NLC_code,
+                                    description text,
+                                    CRS_code text,
+                                    IR_code text,
+                                    ERS_country text,
+                                    ERS_code text,
+                                    fare_group text,
+                                    county text,
+                                    PTE_code text,
+                                    zone_number text,
+                                    zone_index text,
+                                    region text,
+                                    hierarchy text,
+                                    cc_description_out text,
+                                    cc_description_return text,
+                                    ATB_description_out text,
+                                    ATB_description_return text,
+                                    facilities text,
+                                    LUL_encoding text
+                                        ); """
+
+    table = create_table(conn, sql_create_stations_table)
+    return table
+
+def create_station(conn, station):
+    
+    """arguments: database connection, dismantled station
+    creates a row in the station database from a dismantled station"""
+
+    sql = '''INSERT OR REPLACE INTO stations(refresh,
+                                            record_type,
+                                            UIC_code,
+                                            end_date,
+                                            start_date,
+                                            quote_date,
+                                            admin_area,
+                                            NLC_code,
+                                            description,
+                                            CRS_code,
+                                            IR_code,
+                                            ERS_country,
+                                            ERS_code,
+                                            fare_group,
+                                            county,
+                                            PTE_code,
+                                            zone_number,
+                                            zone_index,
+                                            region,
+                                            hierarchy,
+                                            cc_description_out,
+                                            cc_description_return,
+                                            ATB_description_out,
+                                            ATB_description_return,
+                                            facilities,
+                                            LUL_encoding
+                                            ) 
+                                VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);'''
+
+    cursor1 = conn.cursor()
+    cursor1.executemany(sql, station)
+    conn.commit()
+    return cursor1.lastrowid
+
+# tickets
+
+def create_ticket_table(file):
+
+    """creates a database for tickets"""
+
+    conn = create_connection(file)
+
+    sql_create_ticket_table = """ CREATE TABLE IF NOT EXISTS tickets (
+                                refresh text,
+                                record_type text,
+                                flow text,
+                                ticket_code text,
+                                fare text,
+                                restriction text
+                                        ); """
+
+    table = create_table(conn, sql_create_ticket_table)
+    return table
+
+def create_ticket(conn, ticket):
+    
+    """creates a row in the ticket database from a dismantled ticket"""
+
+    sql = '''INSERT OR REPLACE INTO tickets(refresh,
+                                record_type,
+                                flow,
+                                ticket_code,
+                                fare,
+                                restriction) 
+                                VALUES(?,?,?,?,?,?);'''
+
+    cursor1 = conn.cursor()
+    cursor1.executemany(sql, ticket)
+    conn.commit()
+    return cursor1.lastrowid
+
+# flows
+
+def create_flow_table(file):
+
+    """1 argument: file name
+    creates a database for flows in the selected file"""
+
+    conn = create_connection(file)
+
+    sql_create_flows_table = """ CREATE TABLE IF NOT EXISTS flows (
+                                        refresh text,
+                                        record_type text NOT NULL,
+                                        origin_NLC text NOT NULL,
+                                        destination_NLC text NOT NULL,
+                                        route text,
+                                        status text,
+                                        type text,
+                                        direction text,
+                                        start_date text,
+                                        end_date text,
+                                        operator text,
+                                        via_london text,
+                                        standard_discount text,
+                                        fare_manual text,
+                                        flow_number text PRIMARY KEY
+                                        ); """
+
+    table = create_table(conn, sql_create_flows_table)
+    return table
+
+def create_flow(conn, flow):
+    
+    """arguments: database connection, dismantled flow
+    creates a row in the flow database from a dismantled flow"""
+
+    sql = '''INSERT OR REPLACE INTO flows(refresh, record_type, origin_NLC, destination_NLC, route, status, type, direction, start_date, end_date, operator, via_london, standard_discount, fare_manual, flow_number) 
+                                VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);'''
+
+    cursor1 = conn.cursor()
+    cursor1.executemany(sql, flow)
+    conn.commit()
+    return cursor1.lastrowid
+
+import sqlite3
+from sqlite3 import Error
+import timeit
+
+"""defines universal functions for database management"""
+
+def create_connection(file1):
+    """ create a database connection to a SQLite database """
+    conn = None
+    try:
+        conn = sqlite3.connect(file1)
+        return conn
+    except Error as e:
+        print(e)
+    #finally:
+        #if conn:
+            #conn.close()
+
+def create_table(conn, create_table_sql):
+    """create a table from the create_table_sql statement"""
+    try:
+        c = conn.cursor()
+        c.execute(create_table_sql)
+    except Error as e:
+        print(e)
