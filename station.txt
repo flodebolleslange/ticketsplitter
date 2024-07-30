@@ -1,4 +1,4 @@
-from .databases import read_lines
+from databases import read_lines
 
 """defines some functions to unpack station data"""
 
