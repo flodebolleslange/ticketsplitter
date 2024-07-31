@@ -1,4 +1,4 @@
-from databases import read_lines
+from .databases import read_lines
 import pandas as pd
 
 """defines some functions to unpack ticket data"""

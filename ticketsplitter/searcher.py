@@ -1,4 +1,12 @@
-# add the csv importing from the extractor
+import pandas as pd
+
+# import data from csv (see extraction)
+
+pd.read_csv(r"C:\Code\Ticketsplitter data\flows.csv")
+pd.read_csv(r"C:\Code\Ticketsplitter data\tickets.csv")
+pd.read_csv(r"C:\Code\Ticketsplitter data\stations.csv")
+pd.read_csv(r"C:\Code\Ticketsplitter data\clusters.csv")
+pd.read_csv(r"C:\Code\Ticketsplitter data\group_members.csv")
 
 def find_NLCs(NLC_code):
 
