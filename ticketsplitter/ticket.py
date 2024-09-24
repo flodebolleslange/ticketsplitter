@@ -64,8 +64,8 @@ def extract_flows(file):
 
     flowsdf = pd.DataFrame(
         {"refresh": refresh,
-        "record type": record_type,
-        "origin NLC": origin_NLC,
+        "record_type": record_type,
+        "origin_NLC": origin_NLC,
         "destination_NLC": destination_NLC,
         "route": route,
         "status": status,
@@ -101,18 +101,19 @@ def extract_tickets(file):
             if ticket[1] == "T":
                 n = " " + ticket
 
-                refresh.append(n[1])
-                record_type.append(n[2])
-                flow.append(n[3:10])
-                ticket_code.append(n[10:13])
-                fare.append(n[13:21])
-                restriction.append(n[21:23])
+                if float(n[13:21]) > 50:                
+                    refresh.append(n[1])
+                    record_type.append(n[2])
+                    flow.append(n[3:10])
+                    ticket_code.append(n[10:13])
+                    fare.append(float(n[13:21])/100)
+                    restriction.append(n[21:23])
 
     pd.Series(refresh)
     pd.Series(record_type)
     pd.Series(flow) 
     pd.Series(ticket_code) 
-    pd.Series(fare) 
+    pd.Series(fare)
     pd.Series(restriction)
 
     ticketsdf = pd.DataFrame(
