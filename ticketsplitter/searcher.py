@@ -4,26 +4,35 @@ import polars as pl
 
 # import data from csv (see extraction)
 
-df_flows = pl.read_csv(r"C:\Code\Ticketsplitter data\flows.csv",
-                     schema_overrides={"origin_NLC": str, "destination_NLC": str,
-                                       "flow_number": str})
-df_tickets = pl.read_csv(r"C:\Code\Ticketsplitter data\tickets.csv",
-                         schema_overrides={"flow": str})
-df_stations = pl.read_csv(r"C:\Code\Ticketsplitter data\stations.csv",
-                       schema_overrides={"UIC code": str, 
-                                         "National Location Code": str,
-                                         "county": str})
-df_clusters = pl.read_csv(r"C:\Code\Ticketsplitter data\clusters.csv",
-                       schema_overrides={"member code": str})
-df_groups = pl.read_csv(r"C:\Code\Ticketsplitter data\group_members.csv",
-                     schema_overrides={"group_UIC": str,
-                                       "member_UIC": str})
+def import_data():
+    df_flows = pl.read_csv(r"C:\Code\Ticketsplitter data\flows.csv",
+                        schema_overrides={"origin_NLC": str, "destination_NLC": str,
+                                        "flow_number": str})
+    df_tickets = pl.read_csv(r"C:\Code\Ticketsplitter data\tickets.csv",
+                            schema_overrides={"flow": str})
+    df_stations = pl.read_csv(r"C:\Code\Ticketsplitter data\stations.csv",
+                        schema_overrides={"UIC code": str, 
+                                            "National Location Code": str,
+                                            "county": str})
+    df_clusters = pl.read_csv(r"C:\Code\Ticketsplitter data\clusters.csv",
+                        schema_overrides={"member code": str})
+    df_groups = pl.read_csv(r"C:\Code\Ticketsplitter data\group members.csv",
+                        schema_overrides={"group_UIC": str,
+                                        "member_UIC": str})
+    df_routes = pl.read_csv(r"C:\Code\Ticketsplitter data\routes.csv")
+    df_links = pl.read_csv(r"C:\Code\Ticketsplitter data\links.csv")
+    df_route_points = pl.read_csv(r"C:\Code\Ticketsplitter data\route points.csv")
 
-flows = pl.SQLContext(flows_table=df_flows, eager=True)
-tickets = pl.SQLContext(tickets_table=df_tickets, eager=True)
-stations = pl.SQLContext(stations_table=df_stations, eager=True)
-station_clusters = pl.SQLContext(clusters_table=df_clusters, eager=True)
-station_groups = pl.SQLContext(groups_table=df_groups, eager=True)
+    flows = pl.SQLContext(flows_table=df_flows, eager=True)
+    tickets = pl.SQLContext(tickets_table=df_tickets, eager=True)
+    stations = pl.SQLContext(stations_table=df_stations, eager=True)
+    station_clusters = pl.SQLContext(clusters_table=df_clusters, eager=True)
+    station_groups = pl.SQLContext(groups_table=df_groups, eager=True)
+    routes = pl.SQLContext(routes_table=df_routes, eager=True)
+    links = pl.SQLContext(links_table=df_links, eager=True)
+    route_points = pl.SQLContext(route_points_table=df_route_points, eager=True)
+
+    return flows, tickets, stations, station_clusters, station_groups, routes, links, route_points
 
 def find_NLCs(NLC_code, station_groups, station_clusters):
 
@@ -55,10 +64,8 @@ def find_fares(origin_NLC, destination_NLC, flows, tickets, station_groups, stat
             more_flows = flows.execute(
             """
             WITH from_flows AS (
-            SELECT * FROM flows_table WHERE STARTS_WITH(origin_NLC,'""" 
-            + o_code
-            + """')) SELECT flow_number FROM from_flows WHERE STARTS_WITH(destination_NLC,'""" + d_code
-            + """')"""
+            SELECT * FROM flows_table WHERE STARTS_WITH(origin_NLC,'""" + o_code + """')
+            ) SELECT * FROM from_flows WHERE STARTS_WITH(destination_NLC,'""" + d_code + """')"""
             )
             list_flows = more_flows["flow_number"].to_list()
             for flow in list_flows:

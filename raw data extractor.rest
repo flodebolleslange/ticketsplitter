@@ -1,0 +1,8 @@
+curl 'https://opendata.nationalrail.co.uk/authenticate' \
+     --data-urlencode 'username=simonwb11@gmail.com' \
+     --data-urlencode 'password=Be@no123'
+
+
+# curl 'https://opendata.nationalrail.co.uk/api/staticfeeds/2.0/routeing' \
+#      -H 'X-Auth-Token: alice@example.com:1702858757000:JAlA9FAzcdFAfDAZX8a1JYIsXaa4uFNDI0qaePaXRQA=' \
+#      --output routeing.zip
